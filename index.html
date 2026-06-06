@@ -61,6 +61,12 @@
             controls.minDistance = 1;
             controls.maxDistance = 10;
 
+            camera.position.set(0, 0, 3); // cámara atrás, mirando al origen
+            controls.target.set(0, 0, -3); // orbita alrededor del modelo
+            controls.enablePan = false;
+            controls.enableZoom = false;
+            controls.enableRotate = true;
+
             controls.cursorStyle = "grab";
 
             controls.maxPolarAngle = Math.PI / 2;
