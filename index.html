@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mi Cara 3d</title>
+        <style>
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                background-color: #111;
+            }
+            canvas {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="module">
+            import * as GaussianSplats3D from "https://cdn.jsdelivr.net/npm/@mkkellogg/gaussian-splats-3d/build/gaussian-splats-3d.module.js";
+
+            const viewer = new GaussianSplats3D.Viewer({
+                rootElement: document.getElementById("conotenedor"),
+                camera: [0, -1, -0.6],
+                initialCameraPosition: [0, 0, 5],
+                halfPrecisionCovariancesOnGPU: true,
+            });
+
+            viewer
+                .addSplatScene("/gs_Video_petit.splat", {
+                    showLoadingUI: true,
+                    splatAlphaCrop: 0.1,
+                })
+                .then(() => {
+                    viewer.start();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        </script>
+    </body>
+</html>
