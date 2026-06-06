@@ -2,47 +2,54 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Mi Cara 3d</title>
+        <title>Mi Cara usando spark</title>
         <style>
-            body,
-            html {
+            body {
                 margin: 0;
-                padding: 0;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
                 background-color: #111;
-            }
-            canvas {
-                width: 100%;
-                height: 100%;
-                display: block;
+                overflow: hidden;
             }
         </style>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+                    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+                    "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.1.0/spark.module.js"
+                }
+            }
+        </script>
     </head>
     <body>
         <script type="module">
-            import * as GaussianSplats3D from "https://cdn.jsdelivr.net/npm/@mkkellogg/gaussian-splats-3d/build/gaussian-splats-3d.module.js";
+            import * as THREE from "three";
+            import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
 
-            const viewer = new GaussianSplats3D.Viewer({
-                rootElement: document.getElementById("conotenedor"),
-                camera: [0, -1, -0.6],
-                initialCameraPosition: [0, 0, 5],
-                halfPrecisionCovariancesOnGPU: true,
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(
+                60,
+                window.innerWidth / window.innerHeight,
+                0.01,
+                1000,
+            );
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            const spark = new SparkRenderer({ renderer });
+            scene.add(spark);
+
+            const splatURL = "gs_Video_petit.splat";
+            const butterfly = new SplatMesh({ url: splatURL });
+            butterfly.quaternion.set(1, 0, 0, 0);
+            butterfly.position.set(0, 0, -3);
+            scene.add(butterfly);
+
+            renderer.setAnimationLoop(function animate(time) {
+                renderer.render(scene, camera);
+                butterfly.rotation.y += 0.01;
             });
-
-            viewer
-                .addSplatScene("/gs_Video_petit.splat", {
-                    showLoadingUI: true,
-                    splatAlphaCrop: 0.1,
-                })
-                .then(() => {
-                    viewer.start();
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
         </script>
     </body>
 </html>
