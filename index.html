@@ -2,6 +2,10 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        />
         <title>Mi Cara usando spark</title>
         <style>
             body {
@@ -25,6 +29,7 @@
         <script type="module">
             import * as THREE from "three";
             import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+            import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(
@@ -33,8 +38,9 @@
                 0.01,
                 1000,
             );
-            const renderer = new THREE.WebGLRenderer();
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setAnimationLoop(animate);
             document.body.appendChild(renderer.domElement);
 
             const spark = new SparkRenderer({ renderer });
@@ -46,10 +52,28 @@
             butterfly.position.set(0, 0, -3);
             scene.add(butterfly);
 
-            renderer.setAnimationLoop(function animate(time) {
+            let controls = new OrbitControls(camera, renderer.domElement);
+            controls.listenToKeyEvents(window);
+
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 1;
+            controls.maxDistance = 10;
+
+            controls.cursorStyle = "grab";
+
+            controls.maxPolarAngle = Math.PI / 2;
+
+            function animate() {
+                controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
+
+                render();
+            }
+
+            function render() {
                 renderer.render(scene, camera);
-                butterfly.rotation.y += 0.01;
-            });
+            }
         </script>
     </body>
 </html>
