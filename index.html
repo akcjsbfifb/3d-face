@@ -58,18 +58,17 @@
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.screenSpacePanning = false;
-            controls.minDistance = 1;
+            controls.minDistance = 2;
             controls.maxDistance = 10;
 
             camera.position.set(0, 0, 3); // cámara atrás, mirando al origen
             controls.target.set(0, 0, -3); // orbita alrededor del modelo
             controls.enablePan = false;
-            controls.enableZoom = false;
+            controls.enableZoom = true;
             controls.enableRotate = true;
-
             controls.cursorStyle = "grab";
 
-            controls.maxPolarAngle = Math.PI / 2;
+            controls.maxPolarAngle = Math.PI;
 
             function animate() {
                 controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
