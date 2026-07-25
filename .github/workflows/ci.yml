@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-build:
+    # Use your Oracle self-hosted runner (persistent /nix/store).
+    # Fallback label keeps jobs queued until the runner is online.
+    runs-on: [self-hosted, linux, nix]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          nix --version
+          nix develop --command bash -lc 'node -v && pnpm -v'
+
+      - name: Install, lint, build
+        run: nix run .#ci

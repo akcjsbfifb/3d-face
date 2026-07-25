@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #0b0b0f;
+  --color-ink-2: #101018;
+  --color-paper: #ececf1;
+  --color-muted: #82828f;
+  --color-accent: #615fff;
+  --color-accent-soft: #7c86ff;
+  --color-hairline: rgb(236 236 241 / 0.09);
+  --font-display: var(--font-space-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+html {
+  background: #0b0b0f;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #0b0b0f;
+  color: #ececf1;
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #615fff;
+  color: #ececf1;
+}
+
+/* Hairline utility used across sections */
+.hairline-t {
+  border-top: 1px solid rgb(236 236 241 / 0.09);
+}
+
+/* Stack marquee (single marquee on the page) */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 36s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}

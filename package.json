@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-nuevo",
+  "private": true,
+  "packageManager": "pnpm@10.14.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter @portfolio/web --filter @portfolio/api dev",
+    "dev:web": "pnpm --filter @portfolio/web dev",
+    "dev:api": "pnpm --filter @portfolio/api dev",
+    "build": "pnpm -r --filter @portfolio/web --filter @portfolio/api build",
+    "lint": "pnpm -r --filter @portfolio/web --filter @portfolio/api lint",
+    "start": "pnpm -r --parallel --filter @portfolio/web --filter @portfolio/api start"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "sharp", "unrs-resolver"]
+  }
+}

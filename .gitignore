@@ -1,0 +1,14 @@
+node_modules
+.pnpm-store
+.next
+dist
+.turbo
+.env
+.env.local
+*.log
+.DS_Store
+.tmp-config
+.docker-data
+result
+result-*
+.direnv

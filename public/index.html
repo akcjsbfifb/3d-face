@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Face splat - working viewer</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #111;
+        overflow: hidden;
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+          "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.1.0/spark.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      import * as THREE from "three";
+      import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+      // Working display path (copied from the confirmed legacy viewer):
+      // - three@0.180 + Spark 2.1
+      // - SplatMesh({ url: "face.splat" })  -- antimatter15 .splat
+      // - quaternion (1,0,0,0) OpenCV→OpenGL
+      // - position (0,0,-3), camera (0,0,3), OrbitControls target on the splat
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        60,
+        window.innerWidth / window.innerHeight,
+        0.01,
+        1000,
+      );
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setAnimationLoop(animate);
+      document.body.appendChild(renderer.domElement);
+
+      const spark = new SparkRenderer({ renderer });
+      scene.add(spark);
+
+      const face = new SplatMesh({ url: "./face.splat" });
+      face.quaternion.set(1, 0, 0, 0);
+      face.position.set(0, 0, -3);
+      scene.add(face);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.screenSpacePanning = false;
+      controls.minDistance = 2;
+      controls.maxDistance = 10;
+      controls.enablePan = false;
+      camera.position.set(0, 0, 3);
+      controls.target.set(0, 0, -3);
+      controls.maxPolarAngle = Math.PI;
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      function animate() {
+        controls.update();
+        renderer.render(scene, camera);
+      }
+    </script>
+  </body>
+</html>
