@@ -11,9 +11,8 @@ concurrency:
 
 jobs:
   lint-and-build:
-    # Use your Oracle self-hosted runner (persistent /nix/store).
-    # Fallback label keeps jobs queued until the runner is online.
-    runs-on: [self-hosted, linux, nix]
+    # Oracle Ampere (ARM64) self-hosted runner — persistent /nix/store
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v4
